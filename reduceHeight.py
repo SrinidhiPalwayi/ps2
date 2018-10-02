@@ -1,28 +1,27 @@
 import numpy as np
 
 from cumulative_minimum_energy_map import cumulative_minimum_energy_map
-from find_optimal_vertical_seam import find_optimal_vertical_seam
-def reduceWidth(im, energyImage):
+from find_optimal_horizontal_seam import find_optimal_horizontal_seam
+def reduceHeight(im, energyImage):
 
-    map=cumulative_minimum_energy_map(energyImage, 'VERTICAL')
-    x = find_optimal_vertical_seam(map)
-    y = np.arange(im.shape[0])
+    map=cumulative_minimum_energy_map(energyImage, 'HORIZONTAL')
+    y = find_optimal_horizontal_seam(map)
     height, width, channels = im.shape
     e_height, e_width = energyImage.shape
 
-    final_im = np.zeros((height, width-1, channels), dtype=np.uint8)
-    energy_im = np.zeros((e_height, e_width-1), dtype=float)
+    final_im = np.zeros((height -1, width, channels), dtype=np.uint8)
+    energy_im = np.zeros((e_height-1, e_width), dtype=float)
 
-    for y_index in range(0, height):
-        left = im[y_index][:x[y_index]][:]
-        right = im[y_index][x[y_index]+1:][:]
+    for x_index in range(0, width):
+        left = im[:y[x_index], x_index]
+        right = im[y[x_index]+1:, x_index]
         total = np.concatenate((left, right), axis=0)
-        final_im[y_index] = total
+        final_im[:, x_index] = total
 
-        left_e= energyImage[y_index][:x[y_index]]
-        right_e = energyImage[y_index][x[y_index]+1:]
+        left_e= energyImage[:y[x_index], x_index]
+        right_e = energyImage[y[x_index]+1:, x_index]
         total_e = np.concatenate((left_e, right_e), axis=0)
-        energy_im[y_index] = total_e
+        energy_im[:, x_index] = total_e
 
     return (final_im, energy_im)
 

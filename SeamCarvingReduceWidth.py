@@ -10,11 +10,13 @@ import scipy.misc
 
 image = 'inputSeamCarvingPrague.jpg'
 ei =energy_image(image)
+scipy.misc.imsave('outputEnergyPrague.png', ei)
 image_array = np.asarray(plt.imread(image))
 
 for i in range(0,100):
     image_array, ei = reduceWidth(image_array, ei)
 
+scipy.misc.imsave('outputEnergyReduceWidthPrague.png', ei)
 scipy.misc.imsave('outputReduceWidthPrague.png', image_array)
 
 image = 'inputSeamCarvingMall.jpg'

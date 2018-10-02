@@ -5,9 +5,9 @@ import matplotlib.pylab as plt
 import math
 from skimage import color
 from scipy import ndimage, misc
-#fig = plt.figure()
-#ax1 = fig.add_subplot(121)
-#ax2 = fig.add_subplot(122)
+fig = plt.figure()
+import scipy.misc
+
 
 def cumulative_minimum_energy_map(energyImage, seamDirection):
     cum_eng_map = np.zeros((energyImage.shape), dtype=float)
@@ -41,12 +41,13 @@ def cumulative_minimum_energy_map(energyImage, seamDirection):
                 cum_eng_map[index_y][index_x]=energyImage[index_y][index_x]+min(cum_eng_map[i][index_x-1],
                                                                                 cum_eng_map[j][index_x-1],
                                                                                 cum_eng_map[k][index_x-1])
-    #ax1.imshow(energyImage)
-    #ax2.imshow(cum_eng_map)
+    #plt.imshow(cum_eng_map)
     #plt.show()
     return cum_eng_map
 
 
 
-ei =energy_image('hou.png')
-cumulative_minimum_energy_map(ei, "HORIZONTAL")
+ei =energy_image('inputSeamCarvingPrague.jpg')
+#scipy.misc.imsave('EnergyPrague.png', ei)
+map=cumulative_minimum_energy_map(ei, "VERTICAL")
+#scipy.misc.imsave('EnergyMapPragueVertical.png', map)
